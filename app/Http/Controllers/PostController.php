@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::latest()->take(5)->get();
+        return Post::latest()->take(20)->get();
     }
 
     /**
