@@ -13,13 +13,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        if(app()->environment() === 'production') {
-            factory(User::class, 1)->create(['email' => 'info@ideasowners.net','password' => bcrypt('Ideasowners123#@!_api')]);
+        if (app()->environment() === 'production') {
+            factory(User::class, 1)->create(['email' => 'info@ideasowners.net', 'password' => bcrypt('Ideasowners123#@!_api')]);
+        } elseif (app()->environment() === 'local') {
+            factory(User::class, 1)->create(['email' => 'test@test.com']);
+            factory(User::class, 1)->create(['email' => 't']);
+            factory(User::class, 5)->create()->each(function () {
+                factory(Post::class, 10)->create();
+            });
         }
-        factory(User::class, 1)->create(['email' => 'test@test.com']);
-        factory(User::class, 1)->create(['email' => 't']);
-        factory(User::class, 5)->create()->each(function () {
-            factory(Post::class, 10)->create();
-        });
     }
 }
