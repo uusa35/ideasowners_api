@@ -36,7 +36,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->file('image')) {
+        if ($request->hasFile('image')) {
             // it has to be stored within the storage/images/uploads
             // and the following line for sure will save it there oncondition of
             // php artisan storage:link
