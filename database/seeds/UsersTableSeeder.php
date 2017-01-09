@@ -13,6 +13,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        if(app()->environment() === 'production') {
+            factory(User::class, 1)->create(['email' => 'info@ideasowners.net','password' => bcrypt('Ideasowners123#@!_api')]);
+        }
         factory(User::class, 1)->create(['email' => 'test@test.com']);
         factory(User::class, 1)->create(['email' => 't']);
         factory(User::class, 5)->create()->each(function () {
