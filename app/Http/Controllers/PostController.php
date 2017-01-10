@@ -40,8 +40,8 @@ class PostController extends Controller
             // it has to be stored within the storage/images/uploads
             // and the following line for sure will save it there oncondition of
             // php artisan storage:link
-            $fileName = $this->saveImage($request, 'image', 'large', '600', '600');
-            $this->saveImage($request, 'image', 'medium', '360', '360');
+            $fileName = $this->saveImage($request, 'image', 'large', '600', '1024');
+            $this->saveImage($request, 'image', 'medium', '320', '480');
             $request->request->add(['image' => $fileName]);
 
         } else {
