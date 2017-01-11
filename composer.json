@@ -8,7 +8,10 @@
         "php": ">=5.6.4",
         "intervention/image": "^2.3",
         "laravel/framework": "5.3.*",
-        "tymon/jwt-auth": "^0.5.9"
+        "tymon/jwt-auth": "^0.5.9",
+        "barryvdh/laravel-ide-helper": "^2.1",
+        "barryvdh/laravel-debugbar": "^2.2",
+        "fitztrev/query-tracer": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
