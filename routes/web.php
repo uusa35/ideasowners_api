@@ -11,12 +11,7 @@
 |
 */
 
-use App\Post;
-
-Route::post('/posts', function () {
-    return Post::all();
-});
-
-Auth::routes();
+//Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/', 'HomeController@index');
