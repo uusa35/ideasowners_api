@@ -48,8 +48,6 @@ class PostController extends Controller
             return response()->json(['message' => 'you must upload an image'], 500);
         }
 
-        $title = $request->input('title');
-        $body = $request->input('body');
         $user = JWTAuth::parseToken()->authenticate();
 
         if (!$user) {
@@ -104,7 +102,37 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->hasFile('image')) {
+            $fileName = $this->saveImage($request, 'image', 'large', '600', '1024');
+            $this->saveImage($request, 'image', 'medium', '320', '480');
+            $request->request->add(['image' => $fileName]);
+        } else {
+            return response()->json(['message' => 'you must upload an image'], 500);
+        }
+
+        $user = JWTAuth::parseToken()->authenticate();
+
+        if (!$user) {
+
+            return response()->json(['message' => 'you not authorized for such action'], 505);
+
+        }
+
+        $post = Post::whereId($request->id)->first();
+
+        $done = $post->update([
+            'title' => $request->title,
+            'image' => $request->hasFile('image') ? $request->request->get('image') : $post->image,
+            'body' => $request->body,
+            'user_id' => $user->id
+        ]);
+
+
+        if (!$done) {
+            return response()->json(['message' => 'Post not Saved successfully'], 500);
+        }
+
+        return response()->json(['message' => 'Post Saved successfully'], 200);
     }
 
     /**
@@ -115,6 +143,10 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::whereId($id)->delete();
+        if ($post) {
+            return response()->json(['message' => 'post deleted'], 200);
+        }
+        return response()->json(['message' => 'post was not deleted successfully !!'], 500);
     }
 }

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['jwt.auth']], function () {
 
-    Route::post('post', 'PostController@store');
+    Route::resource('post', 'PostController');
 
 });
 
