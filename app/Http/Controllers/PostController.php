@@ -106,8 +106,6 @@ class PostController extends Controller
             $fileName = $this->saveImage($request, 'image', 'large', '600', '1024');
             $this->saveImage($request, 'image', 'medium', '320', '480');
             $request->request->add(['image' => $fileName]);
-        } else {
-            return response()->json(['message' => 'you must upload an image'], 500);
         }
 
         $user = JWTAuth::parseToken()->authenticate();

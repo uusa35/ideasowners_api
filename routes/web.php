@@ -15,3 +15,4 @@
 
 Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
+Route::get('/learn', 'HomeController@learn');
