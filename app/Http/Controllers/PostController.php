@@ -63,7 +63,7 @@ class PostController extends Controller
         }
 
         if ($request->notification) {
-            $post = Post::latest();
+            $post = Post::latest()->first();
             $this->sendNotification($post);
         }
 
