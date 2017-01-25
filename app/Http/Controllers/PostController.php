@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Traits\MobileTrait;
 use App\Post;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PostController extends Controller
 {
+    use MobileTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -36,36 +39,32 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile('image')) {
-            // it has to be stored within the storage/images/uploads
-            // and the following line for sure will save it there oncondition of
-            // php artisan storage:link
-            $fileName = $this->saveImage($request, 'image', 'large', '600', '1024');
-            $this->saveImage($request, 'image', 'medium', '320', '480');
-            $request->request->add(['image' => $fileName]);
-
-        } else {
+        if (!$request->hasFile('image')) {
             return response()->json(['message' => 'you must upload an image'], 500);
         }
+        // it has to be stored within the storage/images/uploads
+        // and the following line for sure will save it there oncondition of
+        // php artisan storage:link
+        $fileName = $this->saveImage($request, 'image', 'large', '600', '1024');
+        $this->saveImage($request, 'image', 'medium', '320', '480');
+        $request->request->add(['image' => $fileName]);
 
-        $user = JWTAuth::parseToken()->authenticate();
+        $user = $this->authJWT();
 
-        if (!$user) {
-
-            return response()->json(['message' => 'you not authorized for such action'], 505);
-
-        }
-
-
-        $post = Post::create([
+        $saved = Post::create([
             'title' => $request->title,
             'body' => $request->body,
             'image' => $request->request->get('image'),
             'user_id' => $user->id
         ]);
 
-        if (!$post) {
+        if (!$saved) {
             return response()->json(['message' => 'Post not Saved successfully'], 500);
+        }
+
+        if ($request->notification) {
+            $post = Post::latest();
+            $this->sendNotification($post);
         }
 
         return response()->json(['message' => 'Post Saved successfully'], 200);
@@ -108,7 +107,7 @@ class PostController extends Controller
             $request->request->add(['image' => $fileName]);
         }
 
-        $user = JWTAuth::parseToken()->authenticate();
+        $user = $this->authJWT();
 
         if (!$user) {
 
@@ -147,4 +146,5 @@ class PostController extends Controller
         }
         return response()->json(['message' => 'post was not deleted successfully !!'], 500);
     }
+
 }
