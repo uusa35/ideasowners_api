@@ -2,6 +2,7 @@
 
 use App\Post;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +27,3 @@ Route::post('auth/me', 'AuthenticateController@getAuthenticatedUser');
 //Route::post('login','UserController@login');
 Route::get('/post/{id}', 'PostController@show');
 Route::get('posts', 'PostController@index');
-
